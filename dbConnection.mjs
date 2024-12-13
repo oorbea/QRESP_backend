@@ -1,12 +1,19 @@
-import mysql from 'mysql/promises';
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+dotenv.config();
 
-async function connectDB () {
+const DB_PASSWORD = process.env.DB_PASSWORD;
+
+function connectDB () {
   try {
-    const connection = await mysql.createConnection({
+    const connection = mysql.createPool({
       host: 'localhost',
       user: 'root',
-      password: process.env.DB_PASSWORD,
-      database: 'qresp_bd'
+      password: DB_PASSWORD,
+      database: 'qresp_bd',
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0
     });
     console.log('Database connected');
     return connection;
