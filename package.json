@@ -1,0 +1,24 @@
+{
+  "name": "qresp_backend",
+  "version": "1.0.0",
+  "description": "Backend from QRESP project",
+  "main": "app.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oorbea/QRESP_backend.git"
+  },
+  "keywords": [
+    "QRESP",
+    "hackathon",
+    "LaMarato"
+  ],
+  "author": "Lluís Morillas & Oriol Orbea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oorbea/QRESP_backend/issues"
+  },
+  "homepage": "https://github.com/oorbea/QRESP_backend#readme"
+}
