@@ -20,5 +20,14 @@
   "bugs": {
     "url": "https://github.com/oorbea/QRESP_backend/issues"
   },
-  "homepage": "https://github.com/oorbea/QRESP_backend#readme"
+  "homepage": "https://github.com/oorbea/QRESP_backend#readme",
+  "dependencies": {
+    "express": "4.21.2"
+  },
+  "devDependencies": {
+    "semistandard": "^17.0.0"
+  },
+  "eslintConfig": {
+    "extends": "semistandard"
+  }
 }
