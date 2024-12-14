@@ -13,6 +13,7 @@ function validateHistory (history) {
 async function createSymptoms (username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise) {
   const db = connect();
   try {
+    db.execute('DELETE FROM symptoms WHERE username = ?', [username]);
     const [result] = await db.execute(
       'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chest_pain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise]
