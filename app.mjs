@@ -304,7 +304,8 @@ app.post('/qresp_api/diagnostic', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const diagnostic = await generateDiagnostic(req.body.username);
-    res.status(201).json({ diagnostic });
+    const emergency = diagnostic.startsWith("AQUEST PACIENT HA D'ANAR A URGÈNCIES");
+    res.status(201).json({ emergency, diagnostic });
   } catch (err) {
     console.error('Error creating diagnostic:', err);
     console.error('Data provided:', req.body);
