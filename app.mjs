@@ -27,6 +27,7 @@ app.post('/qresp_api/register', async (req, res) => {
     res.status(201).json({ message: 'User registered' });
   } catch (err) {
     console.error('Error registering user:', err);
+    console.error('Data provided:', req.body);
     res.status(500).json({ message: `Error registering user: ${err.message}` });
   }
 });
