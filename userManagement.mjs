@@ -34,4 +34,20 @@ async function deleteUser (username) {
   }
 }
 
-export { createUser, deleteUser };
+async function userExists (username) {
+  const db = connect();
+  try {
+    const [result] = await db.execute(
+      'SELECT username FROM users WHERE username = ?', [username]
+    );
+    console.log('User exists:', result);
+    return result;
+  } catch (error) {
+    console.error('Error checking data:', error);
+    throw error;
+  } finally {
+    db.end();
+  }
+}
+
+export { createUser, deleteUser, userExists };

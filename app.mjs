@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { createUser, deleteUser } from './userManagement.mjs';
+import { createUser, deleteUser, userExists } from './userManagement.mjs';
 
 dotenv.config();
 
@@ -19,6 +19,10 @@ app.get('/', (req, res) => {
 
 app.post('/qresp_api/register', async (req, res) => {
   try {
+    const user = await userExists(req.body.username);
+    if (user.length > 0) {
+      return res.status(409).json({ message: 'User already exists' });
+    }
     await createUser(req.body.username, req.body.password);
     res.status(201).json({ message: 'User registered' });
   } catch (err) {
