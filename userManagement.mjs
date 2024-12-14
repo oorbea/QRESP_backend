@@ -50,4 +50,21 @@ async function userExists (username) {
   }
 }
 
-export { createUser, deleteUser, userExists };
+async function createPatient (username, dni, name, lastName, birth, tel, gender, age) {
+  const db = connect();
+  try {
+    const [result] = await db.execute(
+      'INSERT INTO patients (username, dni, name, last_name, birth, tel, gender, age) VALUES (?, ?)',
+      [username, dni, name, lastName, birth, tel, gender, age]
+    );
+    console.log('Patient created:', result);
+    return result;
+  } catch (error) {
+    console.error('Error inserting data:', error);
+    throw error;
+  } finally {
+    db.end();
+  }
+}
+
+export { createUser, deleteUser, userExists, createPatient };

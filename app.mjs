@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { createUser, deleteUser, userExists } from './userManagement.mjs';
+import { createUser, deleteUser, userExists, createPatient } from './userManagement.mjs';
 
 dotenv.config();
 
@@ -38,6 +38,21 @@ app.delete('/qresp_api/delete', async (req, res) => {
   } catch (err) {
     console.error('Error deleting user:', err);
     res.status(500).json({ message: `Error deleting user: ${err.message}` });
+  }
+});
+
+app.post('/qresp_api/patient', async (req, res) => {
+  try {
+    const user = await userExists(req.body.username);
+    if (user.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const age = new Date().getFullYear() - new Date(req.body.birth).getFullYear();
+    await createPatient(req.body.username, req.body.dni, req.body.name, req.body.last_name, req.body.birth, req.body.tel, req.body.gender, age);
+    res.status(201).json({ message: 'Patient registered' });
+  } catch (err) {
+    console.error('Error creating patient:', err);
+    res.status(500).json({ message: `Error creating patient: ${err.message}` });
   }
 });
 
