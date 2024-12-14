@@ -70,7 +70,7 @@ app.get('/qresp_api/qr/:username', async (req, res) => {
   try {
     const db = connectDB();
     const result = await db.execute('SELECT qr from users WHERE username = ?', [req.params.username]);
-    res.status(200).json({ qrCode: result });
+    res.status(200).json({ qrCode: result[0][0].qr });
   } catch (err) {
     console.error('Error generating QR code:', err);
     console.error('Data provided:', req.body);
