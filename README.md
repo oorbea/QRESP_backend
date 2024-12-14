@@ -257,3 +257,50 @@
             "malaise": "boolean"
         }
         ```
+
+## Historial médico
+### Obtener Historial
+- **URL:** `/history/:username`
+- **Método:** `GET`
+- **Descripción:** Obtiene el historial médico de un paciente por su username.
+- **Parámetros de la URL:**
+    - `username` (string): username del paciente.
+- **Respuesta exitosa:**
+    - **Código:** `200 OK`
+    - **Cuerpo:**
+        ```json
+        {
+            "username": "string",
+            "mpid": "string",
+            "ttm_base": "string",
+            "immuno": "boolean",
+            "comorbi": "string"
+        }
+        ```
+
+### Crear Historial
+- **URL:** `/history`
+- **Método:** `POST`
+- **Descripción:** Crea un nuevo registro en el historial médico de un paciente.
+- **Cuerpo de la solicitud:**
+    ```json
+    {
+        "username": "string",
+        "mpid": "string",
+        "ttm_base": "string",
+        "immuno": "boolean",
+        "comorbi": "string"
+    }
+    ```
+- **Respuesta exitosa:**
+    - **Código:** `201 Created`
+    - **Cuerpo:**
+        ```json
+        {
+            "username": "string",
+            "mpid": "string",
+            "ttm_base": "string",
+            "immuno": "boolean",
+            "comorbi": "string"
+        }
+        ```
