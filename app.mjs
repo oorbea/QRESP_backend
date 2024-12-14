@@ -149,14 +149,17 @@ app.post('/qresp_api/user', async (req, res) => {
 
 app.put('/qresp_api/user/:username', async (req, res) => {
   try {
+    if (req.body.password === undefined) return res.status(400).json({ message: 'Password is required' });
+    if (req.body.re_password === undefined) return res.status(400).json({ message: 'Re-enter password is required' });
+    if (req.body.password !== req.body.re_password) return res.status(400).json({ message: 'Passwords do not match' });
+    req.body = { username: req.params.username, password: req.body.password };
     const result = validateUser(req.body);
     if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
 
     const user = await userExists(req.body.username);
     if (user.length === 0) return res.status(409).json({ message: 'User does not exist' });
 
-    const [username, password, rePassword] = [req.body.username, req.body.password, req.body.re_password];
-    if (password !== rePassword) return res.status(400).json({ message: 'Passwords do not match' });
+    const [username, password] = [req.body.username, req.body.password];
 
     await updateUser(username, password);
     res.status(200).json({ username, password });
@@ -223,6 +226,20 @@ app.post('/qresp_api/patient', async (req, res) => {
 
 app.put('/qresp_api/patient/:username', async (req, res) => {
   try {
+    switch (req.body.gender) {
+      case 'Home':
+        req.body.gender = 'M';
+        break;
+      case 'Dona':
+        req.body.gender = 'F';
+        break;
+      case 'Altres':
+        req.body.gender = 'O';
+        break;
+      default:
+        req.body.gender = 'O';
+        break;
+    }
     const result = validatePatient(req.body);
     if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
     const user = await userExists(req.params.username);

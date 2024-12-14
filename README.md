@@ -49,7 +49,8 @@
 - **Cuerpo de la solicitud:**
     ```json
     {
-        "password": "string"
+        "password": "string",
+        "re_password": "string"
     }
     ```
 - **Respuesta exitosa:**
