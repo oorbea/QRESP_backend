@@ -16,10 +16,10 @@ const PORT = process.env.PORT ?? 1000;
 const BASE_URL = `http://localhost:${PORT}`;
 
 app.post('/qresp_api/login', async (req, res) => {
-  const [username, password] = [req.body.username, req.body.password];
-
-  const result = validateUser({ username, password });
+  const result = validateUser(req.body);
   if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
+
+  const [username, password] = [req.body.username, req.body.password];
 
   const db = connectDB();
 
@@ -35,7 +35,7 @@ app.post('/qresp_api/login', async (req, res) => {
 
     const user = rows[0];
 
-    res.status(200).json({ message: 'Login successful', user });
+    res.status(200).json({ message: 'Login successful', username: user.username });
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ message: 'Error logging in' });
