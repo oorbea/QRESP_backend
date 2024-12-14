@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
 
 dotenv.config();
@@ -12,6 +14,43 @@ app.use(express.json());
 
 const PORT = process.env.PORT ?? 1000;
 const BASE_URL = `http://localhost:${PORT}`;
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
+app.post('/qresp_api/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  const result = validateUser({ username, password });
+  if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
+
+  const db = connectDB();
+
+  try {
+    const [rows] = await db.execute(
+      'SELECT * FROM users WHERE username = ? AND password = ?',
+      [username, password]
+    );
+
+    if (rows.length === 0) {
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+
+    const user = rows[0];
+
+    const token = jwt.sign(
+      { username: user.username },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.status(200).json({ message: 'Login successful', token });
+  } catch (error) {
+    console.error('Error logging in:', error);
+    res.status(500).json({ message: 'Error logging in' });
+  } finally {
+    db.end();
+  }
+});
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'API connected' });

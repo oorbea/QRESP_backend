@@ -172,3 +172,26 @@
     - **Código:** `204 No Content`
     - **Cuerpo:**
         'User' *username* 'deleted'
+
+## Login
+
+### Hacer login de un usuario
+- **URL:** `/login`
+- **Método:** `POST`
+- **Descripción:** El usuario inicia sesión en la página.
+- **Cuerpo de la solicitud:**
+    ```json
+    {
+        "username": "string",
+        "password": "string
+    }
+    ```
+- **Respuesta exitosa:**
+    - **Código:** `200 Created`
+    - **Cuerpo:**
+        ```json
+        {
+            "message": "string",
+            "token": "string
+        }
+        ```
