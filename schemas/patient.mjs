@@ -1,8 +1,6 @@
 import z from 'zod';
 
 export const patientSchema = z.object({
-  username: z.string({ invalid_type_error: 'Username must be a string', required_error: 'Username is required' })
-    .max(50, { length_exceeded: 'Username must be at most 50 characters long' }),
 
   dni: z.string({ invalid_type_error: 'DNI must be a string', required_error: 'DNI is required' })
     .max(9, { length_exceeded: 'DNI must be at most 9 characters long' }),
