@@ -195,3 +195,41 @@
             "token": "string
         }
         ```
+
+## Síntomas
+### Crear síntomas
+- **URL:** `/symptoms`
+- **Método:** `POST`
+- **Descripción:** Crea un nuevo set de síntomas.
+- **Cuerpo de la solicitud:**
+    ```json
+    {
+        "username": "string",
+        "suffocate": "boolean",
+        "cough": "boolean",
+        "mucus": "boolean",
+        "congestion": "boolean",
+        "throat": "boolean",
+        "fever": "boolean",
+        "chest_pain": "boolean",
+        "whistle": "boolean",
+        "malaise": "boolean"
+    }
+    ```
+- **Respuesta exitosa:**
+    - **Código:** `201 Created`
+    - **Cuerpo:**
+        ```json
+        {
+            "username": "string",
+            "suffocate": "boolean",
+            "cough": "boolean",
+            "mucus": "boolean",
+            "congestion": "boolean",
+            "throat": "boolean",
+            "fever": "boolean",
+            "chest_pain": "boolean",
+            "whistle": "boolean",
+            "malaise": "boolean"
+        }
+        ```

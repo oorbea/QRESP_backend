@@ -9,7 +9,7 @@ async function createSymptoms (username, suffocate, cough, mucus, congestion, th
   const db = connect();
   try {
     const [result] = await db.execute(
-      'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chest_pain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise]
     );
     console.log('Symptoms created:', result);
@@ -22,4 +22,20 @@ async function createSymptoms (username, suffocate, cough, mucus, congestion, th
   }
 }
 
-export { validateSymptoms, createSymptoms };
+async function getSymptoms (username) {
+  const db = connect();
+  try {
+    const [result] = await db.execute(
+      'SELECT * FROM symptoms WHERE username = ?', [username]
+    );
+    console.log('Symptoms:', result);
+    return result;
+  } catch (error) {
+    console.error('Error getting data:', error);
+    throw error;
+  } finally {
+    db.end();
+  }
+}
+
+export { validateSymptoms, createSymptoms, getSymptoms };

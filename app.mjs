@@ -4,7 +4,7 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
-import { validateSymptoms, createSymptoms } from './symptomsManagement.mjs';
+import { validateSymptoms, createSymptoms, getSymptoms } from './symptomsManagement.mjs';
 
 dotenv.config();
 
@@ -174,6 +174,17 @@ app.put('/qresp_api/patient/:username', async (req, res) => {
   } catch (err) {
     console.error('Error updating patient:', err);
     res.status(500).json({ message: `Error updating patient: ${err.message}` });
+  }
+});
+
+app.get('/qresp_api/symptoms/:username', async (req, res) => {
+  try {
+    const symptoms = await getSymptoms(req.params.username);
+    res.status(200).json(symptoms);
+  } catch (err) {
+    console.error('Error getting symptoms:', err);
+    console.error('Data provided:', req.params);
+    res.status(500).json({ message: `Error getting symptoms: ${err.message}` });
   }
 });
 
