@@ -34,6 +34,39 @@ async function deleteUser (username) {
   }
 }
 
+async function updateUser (username, password) {
+  const db = connect();
+  try {
+    const [result] = await db.execute(
+      'UPDATE users SET password = ? WHERE username = ?',
+      [password, username]
+    );
+    console.log('User updated:', result);
+    return result;
+  } catch (error) {
+    console.error('Error updating data:', error);
+    throw error;
+  } finally {
+    db.end();
+  }
+}
+
+async function getUser (username) {
+  const db = connect();
+  try {
+    const [result] = await db.execute(
+      'SELECT * FROM users WHERE username = ?', [username]
+    );
+    console.log('User:', result);
+    return result;
+  } catch (error) {
+    console.error('Error getting data:', error);
+    throw error;
+  } finally {
+    db.end();
+  }
+}
+
 async function userExists (username) {
   const db = connect();
   try {
@@ -54,7 +87,7 @@ async function createPatient (username, dni, name, lastName, birth, tel, gender,
   const db = connect();
   try {
     const [result] = await db.execute(
-      'INSERT INTO patients (username, dni, name, last_name, birth, tel, gender, age) VALUES (?, ?)',
+      'INSERT INTO patients (username, dni, name, last_name, birth, tel, gender, age) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [username, dni, name, lastName, birth, tel, gender, age]
     );
     console.log('Patient created:', result);
@@ -67,4 +100,37 @@ async function createPatient (username, dni, name, lastName, birth, tel, gender,
   }
 }
 
-export { createUser, deleteUser, userExists, createPatient };
+async function updatePatient (username, dni, name, lastName, birth, tel, gender, age) {
+  const db = connect();
+  try {
+    const [result] = await db.execute(
+      'UPDATE patients SET dni = ?, name = ?, last_name = ?, birth = ?, tel = ?, gender = ?, age = ? WHERE username = ?',
+      [dni, name, lastName, birth, tel, gender, age, username]
+    );
+    console.log('Patient updated:', result);
+    return result;
+  } catch (error) {
+    console.error('Error updating data:', error);
+    throw error;
+  } finally {
+    db.end();
+  }
+}
+
+async function getPatient (username) {
+  const db = connect();
+  try {
+    const [result] = await db.execute(
+      'SELECT * FROM patients WHERE username = ?', [username]
+    );
+    console.log('Patient:', result);
+    return result;
+  } catch (error) {
+    console.error('Error getting data:', error);
+    throw error;
+  } finally {
+    db.end();
+  }
+}
+
+export { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient };
