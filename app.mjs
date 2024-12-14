@@ -20,9 +20,9 @@ app.get('/', (req, res) => {
 app.post('/qresp_api/register', async (req, res) => {
   try {
     const user = await userExists(req.body.username);
-    if (user.length > 0) {
-      return res.status(409).json({ message: 'User already exists' });
-    }
+    if (user.length > 0) return res.status(409).json({ message: 'User already exists' });
+    if (req.body.password !== req.body.re_password) return res.status(400).json({ message: 'Passwords do not match' });
+
     await createUser(req.body.username, req.body.password);
     res.status(201).json({ message: 'User registered' });
   } catch (err) {
