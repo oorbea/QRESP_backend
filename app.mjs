@@ -31,7 +31,7 @@ app.get('/qresp_api/user/:username', async (req, res) => {
 app.post('/qresp_api/user', async (req, res) => {
   try {
     const result = validateUser(req.body);
-    if (result.errot) return res.status(400).json({ message: result.error.errors[0].message });
+    if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
 
     const user = await userExists(req.body.username);
     if (user.length > 0) return res.status(409).json({ message: 'User already exists' });
