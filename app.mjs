@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import jwt from 'jsonwebtoken';
 import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
 import { validateSymptoms, createSymptoms, getSymptoms, getHistory, validateHistory, createHistory } from './medicalManagement.mjs';
@@ -15,8 +14,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT ?? 1000;
 const BASE_URL = `http://localhost:${PORT}`;
-
-const JWT_SECRET = process.env.JWT_SECRET;
 
 app.post('/qresp_api/login', async (req, res) => {
   const { username, password } = req.body;
@@ -38,13 +35,7 @@ app.post('/qresp_api/login', async (req, res) => {
 
     const user = rows[0];
 
-    const token = jwt.sign(
-      { username: user.username },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    res.status(200).json({ message: 'Login successful', token });
+    res.status(200).json({ message: 'Login successful', user });
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ message: 'Error logging in' });
