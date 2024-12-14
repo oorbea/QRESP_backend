@@ -16,7 +16,7 @@ const PORT = process.env.PORT ?? 1000;
 const BASE_URL = `http://localhost:${PORT}`;
 
 app.post('/qresp_api/login', async (req, res) => {
-  const { username, password } = req.body;
+  const [username, password] = [req.body.username, req.body.password];
 
   const result = validateUser({ username, password });
   if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
