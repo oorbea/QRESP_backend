@@ -24,7 +24,10 @@ async function deleteUser (username) {
   try {
     const results = await Promise.all([
       db.execute('DELETE FROM users WHERE username = ?', [username]),
-      db.execute('DELETE FROM patients WHERE username = ?', [username])
+      db.execute('DELETE FROM patients WHERE username = ?', [username]),
+      db.execute('DELETE FROM history WHERE username = ?', [username]),
+      db.execute('DELETE FROM symptoms WHERE username = ?', [username]),
+      db.execute('DELETE FROM exacerbation WHERE username = ?', [username])
     ]);
     console.log('User deleted:', results);
     return results;
