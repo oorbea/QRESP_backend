@@ -197,6 +197,30 @@
         ```
 
 ## Síntomas
+### Obtener síntomas
+- **URL:** `/symptoms/:username`
+- **Método:** `GET`
+- **Descripción:** Obtiene los síntomas de un paciente.
+- **Parámetros de la URL:**
+    - `username` (string): username del paciente.
+- **Respuesta exitosa:**
+    - **Código:** `200 OK`
+    - **Cuerpo:**
+        ```json
+        {
+            "username": "string",
+            "suffocate": "boolean",
+            "cough": "boolean",
+            "mucus": "boolean",
+            "congestion": "boolean",
+            "throat": "boolean",
+            "fever": "boolean",
+            "chest_pain": "boolean",
+            "whistle": "boolean",
+            "malaise": "boolean"
+        }
+        ```
+
 ### Crear síntomas
 - **URL:** `/symptoms`
 - **Método:** `POST`
