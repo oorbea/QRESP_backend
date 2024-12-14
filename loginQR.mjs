@@ -36,7 +36,7 @@ async function generateAndSaveQR (username, password) {
     }
 
     // Definir el nombre del archivo (username.jpg)
-    const qrFilePath = path.normalize(path.join(qrDirectory, `${username}.jpg`));
+    const qrFilePath = path.normalize(path.join(qrDirectory, `${username}.png`));
 
     // Guardar el buffer como archivo .jpg
     fs.writeFileSync(qrFilePath, qrBuffer);
