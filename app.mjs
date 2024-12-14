@@ -151,12 +151,15 @@ app.put('/qresp_api/user/:username', async (req, res) => {
   try {
     const result = validateUser(req.body);
     if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
-    const user = await userExists(req.params.username);
-    if (user.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    await updateUser(req.params.username, req.body.password);
-    res.status(200).json({ username: req.params.username, password: req.body.password });
+
+    const user = await userExists(req.body.username);
+    if (user.length === 0) return res.status(409).json({ message: 'User does not exist' });
+
+    const [username, password, rePassword] = [req.body.username, req.body.password, req.body.re_password];
+    if (password !== rePassword) return res.status(400).json({ message: 'Passwords do not match' });
+
+    await updateUser(username, password);
+    res.status(200).json({ username, password });
   } catch (err) {
     console.error('Error updating user:', err);
     res.status(500).json({ message: `Error updating user: ${err.message}` });
