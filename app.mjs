@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
 import { validateSymptoms, createSymptoms, getSymptoms, getHistory, validateHistory, createHistory } from './medicalManagement.mjs';
-import { generatePermanentQR } from './loginQR.mjs';
+import { generateAndSaveQR } from './loginQR.mjs';
 
 dotenv.config();
 
@@ -66,9 +66,23 @@ app.get('/qresp_api/login', async (req, res) => {
   }
 });
 
+app.get('/qresp_api/qr/:username', async (req, res) => {
+  try {
+    const db = connectDB();
+    const result = await db.execute('SELECT qr from users WHERE username = ?', [req.params.username]);
+    res.status(200).json({ qrCode: result });
+  } catch (err) {
+    console.error('Error generating QR code:', err);
+    console.error('Data provided:', req.body);
+    res.status(500).json({ message: `Error generating QR code: ${err.message}` });
+  }
+});
+
 app.post('/qresp_api/qr', async (req, res) => {
   try {
-    const result = await generatePermanentQR(req.body.username, req.body.password);
+    const result = await generateAndSaveQR(req.body.username, req.body.password);
+    const db = connectDB();
+    db.execute('UPDATE users SET qr = ?', [result]);
     res.status(201).json({ qrCode: result });
   } catch (err) {
     console.error('Error generating QR code:', err);

@@ -1,3 +1,4 @@
+import fs from 'fs';
 import connect from './dbConnection.mjs';
 import { userSchema } from './schemas/user.mjs';
 import { patientSchema } from './schemas/patient.mjs';
@@ -27,7 +28,8 @@ async function deleteUser (username) {
       db.execute('DELETE FROM patients WHERE username = ?', [username]),
       db.execute('DELETE FROM history WHERE username = ?', [username]),
       db.execute('DELETE FROM symptoms WHERE username = ?', [username]),
-      db.execute('DELETE FROM exacerbation WHERE username = ?', [username])
+      db.execute('DELETE FROM exacerbation WHERE username = ?', [username]),
+      fs.promises.unlink(`./qr/${username}.jpg`)
     ]);
     console.log('User deleted:', results);
     return results;

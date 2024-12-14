@@ -304,3 +304,24 @@
             "comorbi": "string"
         }
         ```
+
+        ## QR
+        ### Crear QR
+        - **URL:** `/qr`
+        - **Método:** `POST`
+        - **Descripción:** Crea el código QR de un paciente por su username y password.
+        - **Cuerpo de la solicitud:**
+        ```json
+        {
+            "username": "string",
+            "password": "string
+        }
+        ```
+        - **Respuesta exitosa:**
+            - **Código:** `201 OK`
+            - **Cuerpo:**
+                ```json
+                {
+                    "qr_code": "string"
+                }
+                ```
