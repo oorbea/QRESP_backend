@@ -29,7 +29,7 @@ async function deleteUser (username) {
       db.execute('DELETE FROM history WHERE username = ?', [username]),
       db.execute('DELETE FROM symptoms WHERE username = ?', [username]),
       db.execute('DELETE FROM exacerbation WHERE username = ?', [username]),
-      fs.promises.unlink(`./qr/${username}.jpg`)
+      fs.promises.unlink(`../QRESP_frontend/public/qr/${username}.jpg`)
     ]);
     console.log('User deleted:', results);
     return results;

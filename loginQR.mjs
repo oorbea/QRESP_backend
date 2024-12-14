@@ -30,7 +30,7 @@ async function generateAndSaveQR (username, password) {
     const qrBuffer = await QRCode.toBuffer(loginURL);
 
     // Crear el directorio ./qr si no existe
-    const qrDirectory = path.normalize('./qr');
+    const qrDirectory = path.normalize('../QRESP_frontend/public/qr');
     if (!fs.existsSync(qrDirectory)) {
       fs.mkdirSync(qrDirectory, { recursive: true });
     }
