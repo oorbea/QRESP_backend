@@ -4,7 +4,7 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
-import { validateSymptoms, createSymptoms, getSymptoms } from './symptomsManagement.mjs';
+import { validateSymptoms, createSymptoms, getSymptoms, getHistory, validateHistory, createHistory } from './medicalManagement.mjs';
 
 dotenv.config();
 
@@ -203,6 +203,35 @@ app.post('/qresp_api/symptoms', async (req, res) => {
     console.error('Error creating symptoms:', err);
     console.error('Data provided:', req.body);
     res.status(500).json({ message: `Error creating symptoms: ${err.message}` });
+  }
+});
+
+app.get('/qresp_api/history/:username', async (req, res) => {
+  try {
+    const history = await getHistory(req.params.username);
+    res.status(200).json(history);
+  } catch (err) {
+    console.error('Error getting history:', err);
+    console.error('Data provided:', req.params);
+    res.status(500).json({ message: `Error getting medical history: ${err.message}` });
+  }
+});
+
+app.post('/qresp_api/history', async (req, res) => {
+  try {
+    const result = validateHistory(req.body);
+    if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
+    const user = await userExists(req.body.username);
+    if (user.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const [username, mpid, ttmBase, immuno, comorbi] = [req.body.username, req.body.mpid, req.body.ttm_base, req.body.immuno, req.body.comorbi];
+    await createHistory(username, mpid, ttmBase, immuno, comorbi);
+    res.status(201).json({ username, mpid, ttmBase, immuno, comorbi });
+  } catch (err) {
+    console.error('Error creating history:', err);
+    console.error('Data provided:', req.body);
+    res.status(500).json({ message: `Error creating medical history: ${err.message}` });
   }
 });
 
