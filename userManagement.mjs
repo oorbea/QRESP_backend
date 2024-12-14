@@ -1,4 +1,6 @@
 import connect from './dbConnection.mjs';
+import { userSchema } from './schemas/user.mjs';
+import { patientSchema } from './schemas/patient.mjs';
 
 async function createUser (username, password) {
   const db = connect();
@@ -133,4 +135,12 @@ async function getPatient (username) {
   }
 }
 
-export { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient };
+function validateUser (user) {
+  return userSchema.safeParse(user);
+}
+
+function validatePatient (patient) {
+  return patientSchema.safeParse(patient);
+}
+
+export { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient };

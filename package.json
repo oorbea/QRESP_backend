@@ -28,7 +28,8 @@
     "express": "4.21.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.5",
-    "promise-mysql": "^5.2.0"
+    "promise-mysql": "^5.2.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "semistandard": "^17.0.0"
