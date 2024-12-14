@@ -55,11 +55,8 @@ app.get('/qresp_api/login', async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    res.status(200).json({
-      message: 'Login successful',
-      username: decoded.username
-    });
+    res.cookie('username', decoded.username);
+    res.redirect('http://localhost:3000/consulta');
   } catch (err) {
     console.error('Invalid token:', err);
     res.status(401).json({ message: 'Invalid token' });
@@ -79,15 +76,38 @@ app.get('/qresp_api/qr/:username', async (req, res) => {
 });
 
 app.post('/qresp_api/qr', async (req, res) => {
+  const result = validateUser(req.body);
+  if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
+
+  const [username, password] = [req.body.username, req.body.password];
+
+  const db = connectDB();
+
   try {
-    const result = await generateAndSaveQR(req.body.username, req.body.password);
-    const db = connectDB();
-    db.execute('UPDATE users SET qr = ?', [result]);
-    res.status(201).json({ qrCode: result });
-  } catch (err) {
-    console.error('Error generating QR code:', err);
-    console.error('Data provided:', req.body);
-    res.status(500).json({ message: `Error generating QR code: ${err.message}` });
+    const [rows] = await db.execute(
+      'SELECT * FROM users WHERE username = ? AND password = ?',
+      [username, password]
+    );
+
+    if (rows.length === 0) {
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+
+    try {
+      const result = await generateAndSaveQR(req.body.username, req.body.password);
+      const db = connectDB();
+      db.execute('UPDATE users SET qr = ? WHERE username = ?', [result, req.body.username]);
+      res.status(201).json({ qrCode: result });
+    } catch (err) {
+      console.error('Error generating QR code:', err);
+      console.error('Data provided:', req.body);
+      res.status(500).json({ message: `Error generating QR code: ${err.message}` });
+    }
+  } catch (error) {
+    console.error('Error in credentials:', error);
+    res.status(500).json({ message: 'Error in credentials' });
+  } finally {
+    db.end();
   }
 });
 

@@ -305,23 +305,38 @@
         }
         ```
 
-        ## QR
-        ### Crear QR
-        - **URL:** `/qr`
-        - **Método:** `POST`
-        - **Descripción:** Crea el código QR de un paciente por su username y password.
-        - **Cuerpo de la solicitud:**
+## QR
+### Obtener QR
+- **URL:** `/qr/:username`
+- **Método:** `GET`
+- **Descripción:** Obtiene el qr de un paciente.
+- **Parámetros de la URL:**
+    - `username` (string): username del paciente.
+- **Respuesta exitosa:**
+    - **Código:** `200 OK`
+    - **Cuerpo:**
         ```json
         {
-            "username": "string",
-            "password": "string
+            "qrCode": "string"
         }
         ```
-        - **Respuesta exitosa:**
-            - **Código:** `201 OK`
-            - **Cuerpo:**
-                ```json
-                {
-                    "qr_code": "string"
-                }
-                ```
+
+### Crear QR
+- **URL:** `/qr`
+- **Método:** `POST`
+- **Descripción:** Crea el código QR de un paciente por su username y password y lo almacena en BD.
+- **Cuerpo de la solicitud:**
+```json
+{
+    "username": "string",
+    "password": "string
+}
+```
+- **Respuesta exitosa:**
+    - **Código:** `201 OK`
+    - **Cuerpo:**
+        ```json
+        {
+            "qrCode": "string"
+        }
+        ```
