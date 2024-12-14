@@ -1,9 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import jwt from 'jsonwebtoken';
 import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
 import { validateSymptoms, createSymptoms, getSymptoms, getHistory, validateHistory, createHistory } from './medicalManagement.mjs';
+import { generatePermanentQR } from './loginQR.mjs';
 
 dotenv.config();
 
@@ -41,6 +43,37 @@ app.post('/qresp_api/login', async (req, res) => {
     res.status(500).json({ message: 'Error logging in' });
   } finally {
     db.end();
+  }
+});
+
+app.get('/qresp_api/login', async (req, res) => {
+  const { token } = req.query;
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    res.status(200).json({
+      message: 'Login successful',
+      username: decoded.username
+    });
+  } catch (err) {
+    console.error('Invalid token:', err);
+    res.status(401).json({ message: 'Invalid token' });
+  }
+});
+
+app.post('/qresp_api/qr', async (req, res) => {
+  try {
+    const result = await generatePermanentQR(req.body.username, req.body.password);
+    res.status(201).json({ qrCode: result });
+  } catch (err) {
+    console.error('Error generating QR code:', err);
+    console.error('Data provided:', req.body);
+    res.status(500).json({ message: `Error generating QR code: ${err.message}` });
   }
 });
 
