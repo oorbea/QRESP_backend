@@ -6,6 +6,7 @@ import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
 import { validateSymptoms, createSymptoms, getSymptoms, getHistory, validateHistory, createHistory } from './medicalManagement.mjs';
 import { generateAndSaveQR } from './loginQR.mjs';
+import { generateDiagnostic } from './diagnosticAlgorithm.mjs';
 
 dotenv.config();
 
@@ -290,6 +291,21 @@ app.post('/qresp_api/history', async (req, res) => {
     console.error('Error creating history:', err);
     console.error('Data provided:', req.body);
     res.status(500).json({ message: `Error creating medical history: ${err.message}` });
+  }
+});
+
+app.post('/qresp_api/diagnostic', async (req, res) => {
+  try {
+    const user = await userExists(req.body.username);
+    if (user.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const diagnostic = await generateDiagnostic(req.body.username);
+    res.status(201).json({ diagnostic });
+  } catch (err) {
+    console.error('Error creating diagnostic:', err);
+    console.error('Data provided:', req.body);
+    res.status(500).json({ message: `Error creating diagnostic: ${err.message}` });
   }
 });
 
