@@ -4,6 +4,7 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
+import { validateSymptoms, createSymptoms } from './symptomsManagement.mjs';
 
 dotenv.config();
 
@@ -126,6 +127,21 @@ app.get('/qresp_api/patient/:username', async (req, res) => {
 
 app.post('/qresp_api/patient', async (req, res) => {
   try {
+    switch (req.body.gender) {
+      case 'Home':
+        req.body.gender = 'M';
+        break;
+      case 'Dona':
+        req.body.gender = 'F';
+        break;
+      case 'Altres':
+        req.body.gender = 'O';
+        break;
+
+      default:
+        req.body.gender = 'O';
+        break;
+    }
     const result = validatePatient(req.body);
     if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
     const user = await userExists(req.body.username);
@@ -158,6 +174,24 @@ app.put('/qresp_api/patient/:username', async (req, res) => {
   } catch (err) {
     console.error('Error updating patient:', err);
     res.status(500).json({ message: `Error updating patient: ${err.message}` });
+  }
+});
+
+app.post('/qresp_api/symptoms', async (req, res) => {
+  try {
+    const result = validateSymptoms(req.body);
+    if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
+    const user = await userExists(req.body.username);
+    if (user.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise] = [req.body.username, req.body.suffocate, req.body.cough, req.body.mucus, req.body.congestion, req.body.throat, req.body.fever, req.body.chest_pain, req.body.whistle, req.body.malaise];
+    await createSymptoms(username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise);
+    res.status(201).json({ username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise });
+  } catch (err) {
+    console.error('Error creating symptoms:', err);
+    console.error('Data provided:', req.body);
+    res.status(500).json({ message: `Error creating symptoms: ${err.message}` });
   }
 });
 
