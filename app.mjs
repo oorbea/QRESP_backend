@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import createUser from './userRegister.mjs';
+import { createUser, deleteUser } from './userManagement.mjs';
 
 dotenv.config();
 
@@ -24,6 +24,16 @@ app.post('/qresp_api/register', async (req, res) => {
   } catch (err) {
     console.error('Error registering user:', err);
     res.status(500).json({ message: `Error registering user: ${err.message}` });
+  }
+});
+
+app.delete('/qresp_api/delete', async (req, res) => {
+  try {
+    await deleteUser(req.body.username);
+    res.status(204).json({ message: 'User deleted' });
+  } catch (err) {
+    console.error('Error deleting user:', err);
+    res.status(500).json({ message: `Error deleting user: ${err.message}` });
   }
 });
 
