@@ -72,8 +72,8 @@ async function generateDiagnostic (username) {
     db.end();
   }
   prompt = `Imagina que ets un doctor especialitzat en pneumologia.
-  Necessito que no t'esplaixis i em donis una resposta clara i concisa, ja que podria ser que el pacient necessités anar a urgències.
-  Amb una explicació per sobre dels seus síntomes i com això afecta la seva condició hi haurà prou.
+    Necessito que no t'esplaixis i em donis una resposta clara i concisa, ja que podria ser que el pacient necessités anar a urgències.
+    Amb una explicació per sobre dels seus síntomes i com això afecta la seva condició hi haurà prou.
     Ara et proporcionaré dades d'un pacient que pateix d'una mpid i té les següents condicions:
     - Edat: ${age}
     - Gènere: ${gender}
@@ -84,7 +84,9 @@ async function generateDiagnostic (username) {
     Actualment presenta els següents síntomes: ${symptomsStr}. 
     Proporciona un diagnòstic per a aquest pacient. 
     És molt important que indiquis clarament si aquesta persona hauria d'anar a l'hospital d'urgències o pot esperar.
-    Pren la decisió amb criteris clínics rigorosos i amb la informació que t'he proporcionat.`;
+    Pren la decisió amb criteris clínics rigorosos i amb la informació que t'he proporcionat.
+    En cas que hagi d'anar a urgències, la primera frase que diràs serà **AQUEST PACIENT HA D'ANAR A URGÈNCIES**,
+    en cas contrari, la primera frase serà **AQUEST PACIENT NO HA D'ANAR A URGÈNCIES**.`;
 
   const result = await model.generateContent(prompt);
   return result.response.text();

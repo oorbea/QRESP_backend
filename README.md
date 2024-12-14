@@ -41,7 +41,7 @@
         ```
 
 ### Actualizar Usuario
-- **URL:** `/user/:user`
+- **URL:** `/user/:username`
 - **Método:** `PUT`
 - **Descripción:** Actualiza los detalles de un usuario por su username.
 - **Parámetros de la URL:**
