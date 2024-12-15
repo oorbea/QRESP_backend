@@ -169,23 +169,32 @@ async function generateDecision (username, valoration) {
     micro = await db.execute(
       'SELECT micro FROM tests2 WHERE username = ?', [username]
     );
-    micro = micro[0][0].micro;
+    if (micro.length > 0) micro = micro[0][0].micro;
+    else micro = false;
     antigenuria = await db.execute(
       'SELECT antigenuria FROM tests2 WHERE username = ?', [username]
     );
-    antigenuria = antigenuria[0][0].antigenuria;
+    if (antigenuria.length > 0) antigenuria = antigenuria[0][0].antigenuria;
+    else antigenuria = false;
     hemo = await db.execute(
       'SELECT hemo FROM tests2 WHERE username = ?', [username]
     );
-    hemo = hemo[0][0].hemo;
+    if (hemo.length > 0) hemo = hemo[0][0].hemo;
+    else hemo = false;
     pcr = await db.execute(
       'SELECT pcr FROM tests2 WHERE username = ?', [username]
     );
-    pcr = pcr[0][0].pcr;
+    if (pcr.length > 0) pcr = pcr[0][0].pcr;
+    else pcr = false;
     currDate = await db.execute(
       'SELECT curr_date FROM tests2 WHERE username = ?', [username]
     );
-    console.log(JSON.stringify(currDate));
+    if (currDate.length === 0) {
+      currDate = await db.execute(
+        'SELECT curr_date FROM tests WHERE username = ?', [username]
+      );
+    }
+    currDate = currDate[0][0].curr_date;
   } catch (error) {
     console.error('Error getting data:', error);
     throw error;
@@ -251,8 +260,9 @@ async function generateDecision (username, valoration) {
     }
 
     case 'no_pneumonia': {
-      prompt = `Imagina que ets un doctor especialitzat en pneumologia.
-      És molt important que t'expressis amb claredat i sense allargar de més la resposta.
+      if (micro && antigenuria && hemo && pcr) {
+        prompt = `Imagina que ets un doctor especialitzat en pneumologia.
+        És molt important que t'expressis amb claredat i sense allargar de més la resposta.
         Necessito que ofereixis un diagnòstic amb el seu respectiu tractament per a un pacient que pateix d'una MPID i té les següents condicions:
         - Edat: ${age}
         - Gènere: ${gender}
@@ -284,6 +294,37 @@ async function generateDecision (username, valoration) {
 
         A més a més, has de proporcionar un tractament específic per al pacient segons les seves condicions.
         `;
+      } else {
+        prompt = `Imagina que ets un doctor especialitzat en pneumologia.
+        És molt important que t'expressis amb claredat i sense allargar de més la resposta.
+        Necessito que ofereixis un diagnòstic amb el seu respectiu tractament per a un pacient que pateix d'una MPID i té les següents condicions:
+        - Edat: ${age}
+        - Gènere: ${gender}
+        - Tipus de MPID: ${mpid}
+        - Tractament base: ${ttmBase} 
+        - Immunosupressió: ${immuno} 
+        - Comorbiditats: ${comorbi} 
+        - Síntomes: ${symptomsStr}
+        - Resultat de l'analítica urgent: ${analitic}
+        - Gasometria arterial: ${gasometry}
+        - ECG: ${ecg}
+        - Radiografia de tòrax: ${torax}
+        - Data de les proves: ${currDate} (fa ${today - currDate} dies)
+
+        És molt important que tinguis en compte que siguis rigurós amb els criteris clínics segons les condicions donades.
+        Com probablement el pacient no tingui pneumònia, hauràs de prescriure un tractament que inclogui:
+        - OXIGENOTERAPIA ajustant FIO2 segons requeriments (SatO2 > 92%).
+        - INHIBIDOR BOMBA PROTONS (Omeprazol 20 mg/12-24h e.v.)
+        - N-ACETILCISTEÏNA 600 mg/8h v.o. (potent antioxidant pulmonar).
+        - Només si fumadors/exfumadors: nebulitzacions amb 1,5-2cc atrovent + 2cc SF +/- 0,5cc salbutamol (si no Hipertensió Pulmonar).
+        - MORFINA 2,5-5mg s.c. puntual si dispnea intensa.
+        - HBPM: Bemiparina 2500-3500 UI/0,2 mL (segons Kg pes) s.c./dia
+        - METILPREDNISOLONA (en casos específics): ½-1 mg/Kg pes/d e.v + CALCI +Vit D 500mg/400 UI: 2comp/d v.o
+        - LOSARTAN 50mg/24h v.o. (antiapoptòtic epitelial). Tan sols si sospita dany epitelial alveolar i no hipoTA).
+
+        A més a més, has de proporcionar un tractament específic per al pacient segons les seves condicions.
+        `;
+      }
       break;
     }
 
