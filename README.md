@@ -197,6 +197,14 @@
         }
         ```
 
+## Logout
+### Hacer logout de un usuario
+- **URL:** `/logout`
+- **Método:** `POST`
+- **Descripción:** El usuario cierra sesión en la página.
+- **Respuesta exitosa:**
+    - **Código:** `300 Redirect`
+
 ## Síntomas
 ### Obtener síntomas
 - **URL:** `/symptoms/:username`
