@@ -91,7 +91,8 @@ async function generateDiagnostic (username) {
     És molt important que indiquis clarament si aquesta persona hauria d'anar a l'hospital d'urgències o pot esperar.
     Pren la decisió amb criteris clínics rigorosos i amb la informació que t'he proporcionat.
     En cas que hagi d'anar a urgències, la primera frase que diràs serà "AQUEST PACIENT HA D'ANAR A URGÈNCIES",
-    en cas contrari, la primera frase serà "AQUEST PACIENT NO HA D'ANAR A URGÈNCIES". Quiero la respuesta en texto plano`;
+    en cas contrari, la primera frase serà "AQUEST PACIENT NO HA D'ANAR A URGÈNCIES".
+    Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente.`;
 
   const result = await model.generateContent(prompt);
   return result.response.text();
@@ -221,7 +222,7 @@ async function generateDecision (username, valoration) {
         hauràs de prescriure Piperacilina/Tazobactam 4g/0,5g /8h e.v. (ó cefalosporina 3ª generació) + Levofloxacino 500mg/24h v.o.
         En cas de sospitar de CMV, hauràs de prescriure Ganciclovir 5mg/Kg pes/12h e.v.
         En cas de sospitar Pn. jiroveci, hauràs de prescriure Sulfametoxazol/trimetoprim 800/160 mg/12h e.v. + Àc. Fòlic.
-        Quiero la respuesta en texto plano.
+        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
         `;
       } else {
         prompt = `Imagina que ets un doctor especialitzat en pneumologia.
@@ -249,7 +250,7 @@ async function generateDecision (username, valoration) {
         Com el pacient és immunocompetent, hauràs de prescriure un tractament que inclogui:
         - Oseltamivir 75mg/12h v.o.
         - Cefalosporina 3ªG + Levofloxacino 500 mg/24h v.o.
-        Quiero la respuesta en texto plano.
+        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
         `;
       }
       break;
@@ -289,7 +290,7 @@ async function generateDecision (username, valoration) {
         - LOSARTAN 50mg/24h v.o. (antiapoptòtic epitelial). Tan sols si sospita dany epitelial alveolar i no hipoTA).
 
         A més a més, has de proporcionar un tractament específic per al pacient segons les seves condicions.
-        Quiero la respuesta en texto plano.
+        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
         `;
       } else {
         prompt = `Imagina que ets un doctor especialitzat en pneumologia.
@@ -320,7 +321,7 @@ async function generateDecision (username, valoration) {
         - LOSARTAN 50mg/24h v.o. (antiapoptòtic epitelial). Tan sols si sospita dany epitelial alveolar i no hipoTA).
 
         A més a més, has de proporcionar un tractament específic per al pacient segons les seves condicions.
-        Quiero la respuesta en texto plano.
+        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
         `;
       }
       break;
@@ -356,7 +357,7 @@ async function generateDecision (username, valoration) {
 
         Si no es tractava de TEP, fes-li una valoració parènquima i tracta el seu cas individualment.
         A partir de la informació proporcionada, hauràs de prescriure un tractament específic per al pacient.
-        Quiero la respuesta en texto plano.
+        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
         `;
       break;
     }
