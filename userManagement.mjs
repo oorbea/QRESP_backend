@@ -95,6 +95,9 @@ async function createPatient (username, dni, name, lastName, birth, tel, gender,
       'INSERT INTO patients (username, dni, name, last_name, birth, tel, gender, age) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [username, dni, name, lastName, birth, tel, gender, age]
     );
+    await db.execute(
+      'INSERT INTO symptoms (username) VALUES (?)', [username]
+    );
     return result;
   } catch (error) {
     console.error('Error inserting data:', error);
