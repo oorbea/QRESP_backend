@@ -482,3 +482,24 @@
     - `curr_date` (date): fecha de las pruebas.
 - **Respuesta exitosa:**
     - **Código:** `204 No Content`
+
+## Diagnóstico final
+### Crear decisión final
+- **URL:** `/final_decision`
+- **Método:** `POST`
+- **Descripción:** Crea el diagnóstico final del paciente.
+- **Cuerpo de la solicitud:**
+    ```json
+    {
+        "username": "string",
+        "valoration": "string"
+    }
+    ```
+- **Respuesta exitosa:**
+    - **Código:** `201 OK`
+    - **Cuerpo:**
+        ```json
+        {
+            "decision": "string"
+        }
+        ```
