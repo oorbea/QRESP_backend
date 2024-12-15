@@ -63,7 +63,7 @@ async function createTests2 (username, micro, antigenuria, hemo, pcr, currDate) 
   const db = connect();
   try {
     const [result] = await db.execute(
-      'INSERT INTO tests (username, micro, antigenuria, hemo, pcr, curr_date) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO tests2 (username, micro, antigenuria, hemo, pcr, curr_date) VALUES (?, ?, ?, ?, ?, ?)',
       [username, micro, antigenuria, hemo, pcr, currDate]
     );
     console.log('Tests created:', result);

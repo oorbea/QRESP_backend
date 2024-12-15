@@ -6,7 +6,7 @@ import connectDB from './dbConnection.mjs';
 import { createUser, deleteUser, updateUser, getUser, userExists, createPatient, updatePatient, getPatient, validateUser, validatePatient } from './userManagement.mjs';
 import { validateSymptoms, createSymptoms, getSymptoms, getHistory, validateHistory, createHistory } from './medicalManagement.mjs';
 import { generateAndSaveQR } from './loginQR.mjs';
-import { generateDiagnostic } from './diagnosticAlgorithm.mjs';
+import { generateDiagnostic, generateDecision } from './diagnosticAlgorithm.mjs';
 import { validateTests, getTests, createTests, deleteTests, validateTests2, getTests2, createTests2, deleteTests2 } from './testsManagement.mjs';
 
 dotenv.config();
@@ -424,6 +424,22 @@ app.delete('/qresp_api/tests2/:username/:curr_date', async (req, res) => {
   } catch (err) {
     console.error('Error deleting tests:', err);
     res.status(500).json({ message: `Error deleting tests: ${err.message}` });
+  }
+});
+
+app.post('/qresp_api/final_treatment', async (req, res) => {
+  try {
+    const user = await userExists(req.body.username);
+    if (user.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const [username, valoration] = [req.body.username, req.body.valoration];
+    const decision = await generateDecision(username, valoration);
+    res.status(201).json({ decision });
+  } catch (err) {
+    console.error('Error creating diagnostic:', err);
+    console.error('Data provided:', req.body);
+    res.status(500).json({ message: `Error creating diagnostic: ${err.message}` });
   }
 });
 
