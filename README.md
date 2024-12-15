@@ -184,7 +184,7 @@
     ```json
     {
         "username": "string",
-        "password": "string
+        "password": "string"
     }
     ```
 - **Respuesta exitosa:**
@@ -193,7 +193,7 @@
         ```json
         {
             "message": "string",
-            "token": "string
+            "token": "string"
         }
         ```
 
@@ -330,7 +330,7 @@
 ```json
 {
     "username": "string",
-    "password": "string
+    "password": "string"
 }
 ```
 - **Respuesta exitosa:**
@@ -339,5 +339,26 @@
         ```json
         {
             "qrCode": "string"
+        }
+        ```
+
+## Diagnóstico
+### Crear diagnóstico
+- **URL:** `/diagnostic`
+- **Método:** `POST`
+- **Descripción:** Crea el diagnóstico de un paciente y si debe ir a urgencias o no.
+- **Cuerpo de la solicitud:**
+```json
+{
+    "username": "string"
+}
+```
+- **Respuesta exitosa:**
+    - **Código:** `201 OK`
+    - **Cuerpo:**
+        ```json
+        {
+            "emergency": "boolean",
+            "diagnostic": "string"
         }
         ```
