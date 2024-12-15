@@ -99,7 +99,6 @@ async function generateDiagnostic (username) {
 }
 
 async function generateDecision (username, valoration) {
-  console.log('ENDPOINT CORRECTO     USERNAME: ' + username + '     VALORATION: ' + valoration);
   const db = connectDB();
   try {
     age = await db.execute(
@@ -173,7 +172,6 @@ async function generateDecision (username, valoration) {
       'SELECT micro FROM tests2 WHERE username = ?', [username]
     );
     micro = micro && micro.length > 0 ? micro[0].micro : false;
-    console.log('MICRO: ', micro);
     antigenuria = await db.execute(
       'SELECT antigenuria FROM tests2 WHERE username = ?', [username]
     );
@@ -358,11 +356,11 @@ async function generateDecision (username, valoration) {
         Si no es tractava de TEP, fes-li una valoració parènquima i tracta el seu cas individualment.
         A partir de la informació proporcionada, hauràs de prescriure un tractament específic per al pacient.
         Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
+
         `;
       break;
     }
   }
-  console.log('Llamamos a Gemini: ', prompt);
   const result = await model.generateContent(prompt);
   return result.response.text();
 }

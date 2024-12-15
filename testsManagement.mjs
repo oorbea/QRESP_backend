@@ -16,7 +16,6 @@ async function getTests (username) {
     const [result] = await db.execute(
       'SELECT * FROM tests WHERE username = ?', [username]
     );
-    console.log('Tests:', result);
     return result;
   } catch (error) {
     console.error('Error getting data:', error);
@@ -32,7 +31,6 @@ async function getTests2 (username) {
     const [result] = await db.execute(
       'SELECT * FROM tests2 WHERE username = ?', [username]
     );
-    console.log('Tests:', result);
     return result;
   } catch (error) {
     console.error('Error getting data:', error);
@@ -49,7 +47,6 @@ async function createTests (username, analitic, gasometry, ecg, torax, currDate)
       'INSERT INTO tests (username, analitic, gasometry, ecg, torax, curr_date) VALUES (?, ?, ?, ?, ?, ?)',
       [username, analitic, gasometry, ecg, torax, currDate]
     );
-    console.log('Tests created:', result);
     return result;
   } catch (error) {
     console.error('Error inserting data:', error);
@@ -66,7 +63,6 @@ async function createTests2 (username, micro, antigenuria, hemo, pcr, currDate) 
       'INSERT INTO tests2 (username, micro, antigenuria, hemo, pcr, curr_date) VALUES (?, ?, ?, ?, ?, ?)',
       [username, micro, antigenuria, hemo, pcr, currDate]
     );
-    console.log('Tests created:', result);
     return result;
   } catch (error) {
     console.error('Error inserting data:', error);
@@ -83,7 +79,6 @@ async function deleteTests (username, currDate) {
       'DELETE FROM tests WHERE username = ? AND curr_date = ?',
       [username, currDate]
     );
-    console.log('Tests deleted:', result);
     return result;
   } catch (error) {
     console.error('Error deleting data:', error);
@@ -100,7 +95,6 @@ async function deleteTests2 (username, currDate) {
       'DELETE FROM tests2 WHERE username = ? AND curr_date = ?',
       [username, currDate]
     );
-    console.log('Tests deleted:', result);
     return result;
   } catch (error) {
     console.error('Error deleting data:', error);

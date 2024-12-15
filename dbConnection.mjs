@@ -15,7 +15,6 @@ function connectDB () {
       connectionLimit: 10,
       queueLimit: 0
     });
-    console.log('Database connected');
     return connection;
   } catch (err) {
     console.error('Database connection failed: ' + err);
