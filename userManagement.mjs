@@ -29,6 +29,7 @@ async function deleteUser (username) {
       db.execute('DELETE FROM history WHERE username = ?', [username]),
       db.execute('DELETE FROM symptoms WHERE username = ?', [username]),
       db.execute('DELETE FROM exacerbation WHERE username = ?', [username]),
+      db.execute('DELETE FROM tests WHERE username = ?', [username]),
       fs.promises.access(`../QRESP_frontend/src/qr/${username}.png`, fs.constants.F_OK)
         .then(() => fs.promises.unlink(`../QRESP_frontend/src/qr/${username}.png`))
         .catch(() => console.log('File does not exist, skipping deletion'))
