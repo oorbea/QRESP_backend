@@ -13,7 +13,6 @@ const symList = [];
 let analitic, gasometry, ecg, torax;
 let micro, antigenuria, hemo, pcr;
 let currDate;
-const today = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
 
 async function generateDiagnostic (username) {
   const db = connectDB();
@@ -215,7 +214,7 @@ async function generateDecision (username, valoration) {
         - Antigenúria: ${antigenuria}
         - 2 Hemocultius: ${hemo}
         - PCR virus Influenza A i B: ${pcr}
-        - Data de les proves: ${currDate} (fa ${today - currDate} dies)
+        - Data de les proves: ${currDate}
 
         És molt important que tinguis en compte que és molt probable que el pacient tingui pneumònia,
         en cas de considerar que la prova del PCR és positiva per al virus Influenza,
@@ -242,7 +241,7 @@ async function generateDecision (username, valoration) {
         - Antigenúria: ${antigenuria}
         - 2 Hemocultius: ${hemo}
         - PCR virus Influenza A i B: ${pcr}
-        - Data de les proves: ${currDate} (fa ${today - currDate} dies)
+        - Data de les proves: ${currDate}
 
         És molt important que tinguis en compte que probablement el pacient tingui pneumònia i que
         siguis rigurós amb els criteris clínics segons les condicions donades.
@@ -274,7 +273,7 @@ async function generateDecision (username, valoration) {
         - Antigenúria: ${antigenuria}
         - 2 Hemocultius: ${hemo}
         - PCR virus Influenza A i B: ${pcr}
-        - Data de les proves: ${currDate} (fa ${today - currDate} dies)
+        - Data de les proves: ${currDate}
 
         És molt important que tinguis en compte que siguis rigurós amb els criteris clínics segons les condicions donades.
         Com probablement el pacient no tingui pneumònia, hauràs de prescriure un tractament que inclogui:
@@ -284,7 +283,7 @@ async function generateDecision (username, valoration) {
         - Només si fumadors/exfumadors: nebulitzacions amb 1,5-2cc atrovent + 2cc SF +/- 0,5cc salbutamol (si no Hipertensió Pulmonar).
         - MORFINA 2,5-5mg s.c. puntual si dispnea intensa.
         - HBPM: Bemiparina 2500-3500 UI/0,2 mL (segons Kg pes) s.c./dia
-        - METILPREDNISOLONA (en casos específics): ½-1 mg/Kg pes/d e.v + CALCI +Vit D 500mg/400 UI: 2comp/d v.o
+        - METILPREDNISOLONA (en casos específics): 0.5-1 mg/Kg pes/d e.v + CALCI +Vit D 500mg/400 UI: 2comp/d v.o
         - LOSARTAN 50mg/24h v.o. (antiapoptòtic epitelial). Tan sols si sospita dany epitelial alveolar i no hipoTA).
 
         A més a més, has de proporcionar un tractament específic per al pacient segons les seves condicions.
@@ -304,7 +303,7 @@ async function generateDecision (username, valoration) {
         - Gasometria arterial: ${gasometry}
         - ECG: ${ecg}
         - Radiografia de tòrax: ${torax}
-        - Data de les proves: ${currDate} (fa ${today - currDate} dies)
+        - Data de les proves: ${currDate}
 
         És molt important que tinguis en compte que siguis rigurós amb els criteris clínics segons les condicions donades.
         Com probablement el pacient no tingui pneumònia, hauràs de prescriure un tractament que inclogui:
@@ -342,7 +341,7 @@ async function generateDecision (username, valoration) {
         - Antigenúria: ${antigenuria}
         - 2 Hemocultius: ${hemo}
         - PCR virus Influenza A i B: ${pcr}
-        - Data de les proves: ${currDate} (fa ${today - currDate} dies)
+        - Data de les proves: ${currDate}
 
         En aquest cas, no disposem d'un diagnòstic concret per al pacient, però és molt important que
         tinguis en compte que siguis rigurós amb els criteris clínics segons les condicions donades.
@@ -357,7 +356,7 @@ async function generateDecision (username, valoration) {
       break;
     }
   }
-  console.log('Llamamos a Gemini');
+  console.log('Llamamos a Gemini: ', prompt);
   const result = await model.generateContent(prompt);
   return result.response.text();
 }
