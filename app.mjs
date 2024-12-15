@@ -67,7 +67,7 @@ app.get('/qresp_api/login', async (req, res) => {
 
 app.post('/qresp_api/logout', (req, res) => {
   res.clearCookie('username');
-  res.redirect('localhost:3000');
+  res.status(200).json({ message: 'Logout successful' });
 });
 
 app.get('/qresp_api/qr/:username', async (req, res) => {

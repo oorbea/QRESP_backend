@@ -203,7 +203,7 @@
 - **Método:** `POST`
 - **Descripción:** El usuario cierra sesión en la página.
 - **Respuesta exitosa:**
-    - **Código:** `300 Redirect`
+    - **Código:** `200 OK`
 
 ## Síntomas
 ### Obtener síntomas
