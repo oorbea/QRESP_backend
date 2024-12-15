@@ -7,7 +7,7 @@ import { createUser, deleteUser, updateUser, getUser, userExists, createPatient,
 import { validateSymptoms, createSymptoms, getSymptoms, getHistory, validateHistory, createHistory } from './medicalManagement.mjs';
 import { generateAndSaveQR } from './loginQR.mjs';
 import { generateDiagnostic } from './diagnosticAlgorithm.mjs';
-import { validateTests, getTests, createTests, deleteTests } from './testsManagement.mjs';
+import { validateTests, getTests, createTests, deleteTests, validateTests2, getTests2, createTests2, deleteTests2 } from './testsManagement.mjs';
 
 dotenv.config();
 
@@ -183,7 +183,7 @@ app.delete('/qresp_api/user/:username', async (req, res) => {
 app.get('/qresp_api/patient/:username', async (req, res) => {
   try {
     const patient = await getPatient(req.params.username);
-    res.status(200).json(patient);
+    res.status(200).json(patient[0]);
   } catch (err) {
     console.error('Error getting patient:', err);
     console.error('Data provided:', req.params);
@@ -334,6 +334,17 @@ app.post('/qresp_api/diagnostic', async (req, res) => {
 app.get('/qresp_api/tests/:username', async (req, res) => {
   try {
     const tests = await getTests(req.params.username);
+    res.status(200).json(tests);
+  } catch (err) {
+    console.error('Error getting tests:', err);
+    console.error('Data provided:', req.params);
+    res.status(500).json({ message: `Error getting tests: ${err.message}` });
+  }
+});
+
+app.get('/qresp_api/tests2/:username', async (req, res) => {
+  try {
+    const tests = await getTests2(req.params.username);
     res.status(200).json(tests);
   } catch (err) {
     console.error('Error getting tests:', err);
