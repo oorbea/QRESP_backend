@@ -23,7 +23,6 @@ async function createSymptoms (username, suffocate, cough, mucus, congestion, th
       'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chest_pain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise]
     );
-    console.log('Symptoms created:', result);
     db.end();
     return result;
   } catch (error) {
@@ -39,7 +38,6 @@ async function getSymptoms (username) {
     const [result] = await db.execute(
       'SELECT * FROM symptoms WHERE username = ?', [username]
     );
-    console.log('Symptoms:', result);
     return result;
   } catch (error) {
     console.error('Error getting data:', error);
@@ -56,7 +54,6 @@ async function createHistory (username, mpid, ttmBase, immuno, comorbi) {
       'INSERT INTO history (username, mpid, ttm_base, immuno, comorbi) VALUES (?, ?, ?, ?, ?)',
       [username, mpid, ttmBase, immuno, comorbi]
     );
-    console.log('History created:', result);
     return result;
   } catch (error) {
     console.error('Error inserting data:', error);
@@ -72,7 +69,6 @@ async function getHistory (username) {
     const [result] = await db.execute(
       'SELECT * FROM history WHERE username = ?', [username]
     );
-    console.log('History:', result);
     return result;
   } catch (error) {
     console.error('Error getting data:', error);

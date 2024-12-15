@@ -20,11 +20,17 @@ function fileToGenerativePart (path, mimeType) {
 
 const filePart1 = fileToGenerativePart('data/AGUDITZACIONS.pdf', 'application/pdf');
 const filePart2 = fileToGenerativePart('data/Enfermedades_Intersticiales_pulmonares.pdf', 'application/pdf');
+const filePart3 = fileToGenerativePart('data/Bronquiolitis.html', 'text/html');
+const filePart4 = fileToGenerativePart('data/Fibrosis.html', 'text/html');
+const filePart5 = fileToGenerativePart('data/Neumonia_linfoide.html', 'text/html');
 
 async function run (prompt) {
   const imageParts = [
     filePart1,
-    filePart2
+    filePart2,
+    filePart3,
+    filePart4,
+    filePart5
   ];
 
   const generatedContent = await model.generateContent([prompt, ...imageParts]);
@@ -125,7 +131,6 @@ async function generateDiagnostic (username) {
 }
 
 async function generateDecision (username, valoration) {
-  console.log('ENDPOINT CORRECTO     USERNAME: ' + username + '     VALORATION: ' + valoration);
   const db = connectDB();
   try {
     age = await db.execute(
@@ -199,7 +204,6 @@ async function generateDecision (username, valoration) {
       'SELECT micro FROM tests2 WHERE username = ?', [username]
     );
     micro = micro && micro.length > 0 ? micro[0].micro : false;
-    console.log('MICRO: ', micro);
     antigenuria = await db.execute(
       'SELECT antigenuria FROM tests2 WHERE username = ?', [username]
     );

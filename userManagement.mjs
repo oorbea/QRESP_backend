@@ -10,7 +10,6 @@ async function createUser (username, password) {
       'INSERT INTO users (username, password) VALUES (?, ?)',
       [username, password]
     );
-    console.log('User created:', result);
     return result;
   } catch (error) {
     console.error('Error inserting data:', error);
@@ -34,7 +33,6 @@ async function deleteUser (username) {
         .then(() => fs.promises.unlink(`../QRESP_frontend/src/qr/${username}.png`))
         .catch(() => console.log('File does not exist, skipping deletion'))
     ]);
-    console.log('User deleted:', results);
     return results;
   } catch (error) {
     console.error('Error deleting data:', error);
@@ -51,7 +49,6 @@ async function updateUser (username, password) {
       'UPDATE users SET password = ? WHERE username = ?',
       [password, username]
     );
-    console.log('User updated:', result);
     return result;
   } catch (error) {
     console.error('Error updating data:', error);
@@ -67,7 +64,6 @@ async function getUser (username) {
     const [result] = await db.execute(
       'SELECT * FROM users WHERE username = ?', [username]
     );
-    console.log('User:', result);
     return result;
   } catch (error) {
     console.error('Error getting data:', error);
@@ -83,7 +79,6 @@ async function userExists (username) {
     const [result] = await db.execute(
       'SELECT username FROM users WHERE username = ?', [username]
     );
-    console.log('User exists:', result);
     return result;
   } catch (error) {
     console.error('Error checking data:', error);
@@ -100,7 +95,6 @@ async function createPatient (username, dni, name, lastName, birth, tel, gender,
       'INSERT INTO patients (username, dni, name, last_name, birth, tel, gender, age) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [username, dni, name, lastName, birth, tel, gender, age]
     );
-    console.log('Patient created:', result);
     return result;
   } catch (error) {
     console.error('Error inserting data:', error);
@@ -117,7 +111,6 @@ async function updatePatient (username, dni, name, lastName, birth, tel, gender,
       'UPDATE patients SET dni = ?, name = ?, last_name = ?, birth = ?, tel = ?, gender = ?, age = ? WHERE username = ?',
       [dni, name, lastName, birth, tel, gender, age, username]
     );
-    console.log('Patient updated:', result);
     return result;
   } catch (error) {
     console.error('Error updating data:', error);
@@ -133,7 +126,6 @@ async function getPatient (username) {
     const [result] = await db.execute(
       'SELECT * FROM patients WHERE username = ?', [username]
     );
-    console.log('Patient:', result);
     return result;
   } catch (error) {
     console.error('Error getting data:', error);

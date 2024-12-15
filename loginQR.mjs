@@ -20,29 +20,21 @@ const BASE_URL = `http://localhost:${PORT}`;
  */
 async function generateAndSaveQR (username, password) {
   try {
-    // Generar token permanente (puedes modificar esta función según tu implementación)
     const token = generatePermanentToken(username, password);
 
-    // Crear la URL de inicio de sesión
     const loginURL = `${BASE_URL}/qresp_api/login?token=${token}`;
 
-    // Generar el QR como un buffer de imagen
     const qrBuffer = await QRCode.toBuffer(loginURL);
 
-    // Crear el directorio ./qr si no existe
     const qrDirectory = path.normalize('../QRESP_frontend/src/qr');
     if (!fs.existsSync(qrDirectory)) {
       fs.mkdirSync(qrDirectory, { recursive: true });
     }
 
-    // Definir el nombre del archivo (username.jpg)
     const qrFilePath = path.normalize(path.join(qrDirectory, `${username}.png`));
 
-    // Guardar el buffer como archivo .jpg
     fs.writeFileSync(qrFilePath, qrBuffer);
-
-    console.log(`QR generado y guardado en: ${qrFilePath}`);
-    return qrFilePath; // Opcionalmente, devolver la ruta del archivo
+    return qrFilePath;
   } catch (err) {
     console.error('Error al generar o guardar el QR:', err);
     throw err;
