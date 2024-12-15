@@ -1,6 +1,7 @@
 import z from 'zod';
 
 export const symptomsSchema = z.object({
+  username: z.string({ invalid_type_error: 'Username must be a string', required_error: 'Username is required' }),
   suffocate: z.boolean({ invalid_type_error: 'Suffocate must be a boolean', required_error: 'Suffocate is required' }),
   cough: z.boolean({ invalid_type_error: 'Cough must be a boolean', required_error: 'Cough is required' }),
   mucus: z.boolean({ invalid_type_error: 'Mucus must be a boolean', required_error: 'Mucus is required' }),
