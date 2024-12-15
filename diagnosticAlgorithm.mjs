@@ -85,8 +85,8 @@ async function generateDiagnostic (username) {
     Proporciona un diagnòstic per a aquest pacient. 
     És molt important que indiquis clarament si aquesta persona hauria d'anar a l'hospital d'urgències o pot esperar.
     Pren la decisió amb criteris clínics rigorosos i amb la informació que t'he proporcionat.
-    En cas que hagi d'anar a urgències, la primera frase que diràs serà **AQUEST PACIENT HA D'ANAR A URGÈNCIES**,
-    en cas contrari, la primera frase serà **AQUEST PACIENT NO HA D'ANAR A URGÈNCIES**.`;
+    En cas que hagi d'anar a urgències, la primera frase que diràs serà "AQUEST PACIENT HA D'ANAR A URGÈNCIES",
+    en cas contrari, la primera frase serà "AQUEST PACIENT NO HA D'ANAR A URGÈNCIES".`;
 
   const result = await model.generateContent(prompt);
   return result.response.text();
