@@ -369,11 +369,35 @@ app.post('/qresp_api/tests', async (req, res) => {
       await createTests(username, analitic, gasometry, ecg, torax, currDate);
       return res.status(201).json({ username, analitic, gasometry, ecg, torax, currDate });
     }
-    console.log('FUERA DEL IF');
     const currDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-    console.log(currDate);
     await createTests(username, analitic, gasometry, ecg, torax, currDate);
     return res.status(201).json({ username, analitic, gasometry, ecg, torax, currDate });
+  } catch (err) {
+    console.error('Error registering user:', err);
+    console.error('Data provided:', req.body);
+    res.status(500).json({ message: `Error registering user: ${err.message}` });
+  }
+});
+
+app.post('/qresp_api/tests2', async (req, res) => {
+  try {
+    const result = validateTests2(req.body);
+    if (result.error) return res.status(400).json({ message: result.error.errors[0].message });
+
+    const user = await userExists(req.body.username);
+    if (user.length === 0) return res.status(409).json({ message: 'User does not exists' });
+
+    const [username, micro, antigenuria, hemo, pcr] = [req.body.username, req.body.micro, req.body.antigenuria, req.body.hemo, req.body.pcr];
+
+    if (req.body.curr_date) {
+      const currDate = req.body.curr_date;
+      if (currDate > `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`) return res.status(400).json({ message: 'Invalid date' });
+      await createTests2(username, micro, antigenuria, hemo, pcr, currDate);
+      return res.status(201).json({ username, micro, antigenuria, hemo, pcr, currDate });
+    }
+    const currDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
+    await createTests2(username, micro, antigenuria, hemo, pcr, currDate);
+    return res.status(201).json({ username, micro, antigenuria, hemo, pcr, currDate });
   } catch (err) {
     console.error('Error registering user:', err);
     console.error('Data provided:', req.body);
@@ -385,6 +409,17 @@ app.delete('/qresp_api/tests/:username/:curr_date', async (req, res) => {
   try {
     const [username, currDate] = [req.params.username, req.params.curr_date];
     await deleteTests(username, currDate);
+    res.status(204).json({ message: `Tests for ${username} on ${currDate} deleted` });
+  } catch (err) {
+    console.error('Error deleting tests:', err);
+    res.status(500).json({ message: `Error deleting tests: ${err.message}` });
+  }
+});
+
+app.delete('/qresp_api/tests2/:username/:curr_date', async (req, res) => {
+  try {
+    const [username, currDate] = [req.params.username, req.params.curr_date];
+    await deleteTests2(username, currDate);
     res.status(204).json({ message: `Tests for ${username} on ${currDate} deleted` });
   } catch (err) {
     console.error('Error deleting tests:', err);
