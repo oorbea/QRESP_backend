@@ -14,17 +14,22 @@ async function createSymptoms (username, suffocate, cough, mucus, congestion, th
   const db = connect();
   try {
     db.execute('DELETE FROM symptoms WHERE username = ?', [username]);
+  } catch (error) {
+    console.error('Error deleting data:', error);
+    throw error;
+  }
+  try {
     const [result] = await db.execute(
       'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chest_pain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [username, suffocate || false, cough || false, mucus || false, congestion || false, throat || false, fever || false, chestPain || false, whistle || false, malaise || false]
+      [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise]
     );
     console.log('Symptoms created:', result);
+    db.end();
     return result;
   } catch (error) {
     console.error('Error inserting data:', error);
-    throw error;
-  } finally {
     db.end();
+    throw error;
   }
 }
 

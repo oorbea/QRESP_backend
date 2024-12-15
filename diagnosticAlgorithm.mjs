@@ -194,7 +194,6 @@ async function generateDecision (username, valoration) {
     console.error('Error getting data:', error);
     throw error;
   }
-  console.log('DATA: ', age, gender, mpid, ttmBase, immuno, comorbi, symptomsStr, analitic, gasometry, ecg, torax, micro, antigenuria, hemo, pcr, currDate);
   switch (valoration) {
     case 'pneumonia': {
       if (immuno === 'Immunosuprimit') {
@@ -326,7 +325,7 @@ async function generateDecision (username, valoration) {
 
     default: {
       prompt = `Imagina que ets un doctor especialitzat en pneumologia.
-      És molt important que t'expressis amb claredat i sense allargar de més la resposta.
+        És molt important que t'expressis amb claredat i sense allargar de més la resposta.
         Necessito que ofereixis un diagnòstic amb el seu respectiu tractament per a un pacient que pateix d'una MPID i té les següents condicions:
         - Edat: ${age}
         - Gènere: ${gender}
