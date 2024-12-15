@@ -59,16 +59,18 @@ async function generateDiagnostic (username) {
       'SELECT * FROM symptoms WHERE username = ?', [username]
     );
     const symp = symptoms[0][0];
-    if (symp.suffocate) symList.push('ofeg');
-    if (symp.cough) symList.push('tos');
-    if (symp.mucus) symList.push('increment de mucositat');
-    if (symp.congestion) symList.push('congestió nasal');
-    if (symp.throat) symList.push('dolor de gola');
-    if (symp.fever) symList.push('febre');
-    if (symp.chest_pain) symList.push('dolor toràcic');
-    if (symp.whistle) symList.push('sibilància');
-    if (symp.malaise) symList.push('malestar general');
-    symptomsStr = symList.join(', ');
+    if (symp) {
+      if (symp.suffocate) symList.push('ofeg');
+      if (symp.cough) symList.push('tos');
+      if (symp.mucus) symList.push('increment de mucositat');
+      if (symp.congestion) symList.push('congestió nasal');
+      if (symp.throat) symList.push('dolor de gola');
+      if (symp.fever) symList.push('febre');
+      if (symp.chest_pain) symList.push('dolor toràcic');
+      if (symp.whistle) symList.push('sibilància');
+      if (symp.malaise) symList.push('malestar general');
+      symptomsStr = symList.join(', ');
+    } else symptomsStr = 'no presenta símptomes';
   } catch (error) {
     console.error('Error getting data:', error);
     throw error;
@@ -97,6 +99,7 @@ async function generateDiagnostic (username) {
 }
 
 async function generateDecision (username, valoration) {
+  console.log('ENDPOINT CORRECTO     USERNAME: ' + username + '     VALORATION: ' + valoration);
   const db = connectDB();
   try {
     age = await db.execute(
@@ -169,36 +172,29 @@ async function generateDecision (username, valoration) {
     micro = await db.execute(
       'SELECT micro FROM tests2 WHERE username = ?', [username]
     );
-    if (micro.length > 0) micro = micro[0][0].micro;
-    else micro = false;
+    micro = micro && micro.length > 0 ? micro[0].micro : false;
+    console.log('MICRO: ', micro);
     antigenuria = await db.execute(
       'SELECT antigenuria FROM tests2 WHERE username = ?', [username]
     );
-    if (antigenuria.length > 0) antigenuria = antigenuria[0][0].antigenuria;
-    else antigenuria = false;
+    antigenuria = antigenuria && antigenuria.length > 0 ? antigenuria[0].antigenuria : false;
     hemo = await db.execute(
       'SELECT hemo FROM tests2 WHERE username = ?', [username]
     );
-    if (hemo.length > 0) hemo = hemo[0][0].hemo;
-    else hemo = false;
+    hemo = hemo && hemo.length > 0 ? hemo[0].hemo : false;
     pcr = await db.execute(
       'SELECT pcr FROM tests2 WHERE username = ?', [username]
     );
-    if (pcr.length > 0) pcr = pcr[0][0].pcr;
-    else pcr = false;
+    pcr = pcr && pcr.length > 0 ? pcr[0].pcr : false;
     currDate = await db.execute(
-      'SELECT curr_date FROM tests2 WHERE username = ?', [username]
+      'SELECT curr_date FROM tests WHERE username = ?', [username]
     );
-    if (currDate.length === 0) {
-      currDate = await db.execute(
-        'SELECT curr_date FROM tests WHERE username = ?', [username]
-      );
-    }
     currDate = currDate[0][0].curr_date;
   } catch (error) {
     console.error('Error getting data:', error);
     throw error;
   }
+  console.log('DATA: ', age, gender, mpid, ttmBase, immuno, comorbi, symptomsStr, analitic, gasometry, ecg, torax, micro, antigenuria, hemo, pcr, currDate);
   switch (valoration) {
     case 'pneumonia': {
       if (immuno === 'Immunosuprimit') {
@@ -362,6 +358,7 @@ async function generateDecision (username, valoration) {
       break;
     }
   }
+  console.log('Llamamos a Gemini');
   const result = await model.generateContent(prompt);
   return result.response.text();
 }

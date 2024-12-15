@@ -16,7 +16,7 @@ async function createSymptoms (username, suffocate, cough, mucus, congestion, th
     db.execute('DELETE FROM symptoms WHERE username = ?', [username]);
     const [result] = await db.execute(
       'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chest_pain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise]
+      [username, suffocate || false, cough || false, mucus || false, congestion || false, throat || false, fever || false, chestPain || false, whistle || false, malaise || false]
     );
     console.log('Symptoms created:', result);
     return result;
