@@ -13,19 +13,13 @@ function validateHistory (history) {
 async function createSymptoms (username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise) {
   const db = connect();
   try {
-    db.execute('DELETE FROM symptoms WHERE username = ?', [username])
-      .then(async () => {
-        const [result] = await db.execute(
-          'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chest_pain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise]
-        );
-        console.log('Symptoms created:', result);
-        return result;
-      })
-      .catch(err => {
-        console.error('Error deleting data:', err);
-        throw err;
-      });
+    db.execute('DELETE FROM symptoms WHERE username = ?', [username]);
+    const [result] = await db.execute(
+      'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chest_pain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise]
+    );
+    console.log('Symptoms created:', result);
+    return result;
   } catch (error) {
     console.error('Error inserting data:', error);
     throw error;
