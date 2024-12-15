@@ -5,6 +5,22 @@ function validateTests (tests) {
   return testsSchema.safeParse(tests);
 }
 
+async function getTests (username) {
+  const db = connect();
+  try {
+    const [result] = await db.execute(
+      'SELECT * FROM tests WHERE username = ?', [username]
+    );
+    console.log('Tests:', result);
+    return result;
+  } catch (error) {
+    console.error('Error getting data:', error);
+    throw error;
+  } finally {
+    db.end();
+  }
+}
+
 async function createTests (username, analitic, gasometry, ecg, torax, currDate) {
   const db = connect();
   try {
@@ -39,4 +55,4 @@ async function deleteTests (username, currDate) {
   }
 }
 
-export { validateTests, createTests, deleteTests };
+export { validateTests, getTests, createTests, deleteTests };

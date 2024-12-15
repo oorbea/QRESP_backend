@@ -7,7 +7,7 @@ import { createUser, deleteUser, updateUser, getUser, userExists, createPatient,
 import { validateSymptoms, createSymptoms, getSymptoms, getHistory, validateHistory, createHistory } from './medicalManagement.mjs';
 import { generateAndSaveQR } from './loginQR.mjs';
 import { generateDiagnostic } from './diagnosticAlgorithm.mjs';
-import { validateTests, createTests, deleteTests } from './testsManagement.mjs';
+import { validateTests, getTests, createTests, deleteTests } from './testsManagement.mjs';
 
 dotenv.config();
 
@@ -328,6 +328,17 @@ app.post('/qresp_api/diagnostic', async (req, res) => {
     console.error('Error creating diagnostic:', err);
     console.error('Data provided:', req.body);
     res.status(500).json({ message: `Error creating diagnostic: ${err.message}` });
+  }
+});
+
+app.get('/qresp_api/tests/:username', async (req, res) => {
+  try {
+    const tests = await getTests(req.params.username);
+    res.status(200).json(tests);
+  } catch (err) {
+    console.error('Error getting tests:', err);
+    console.error('Data provided:', req.params);
+    res.status(500).json({ message: `Error getting tests: ${err.message}` });
   }
 });
 

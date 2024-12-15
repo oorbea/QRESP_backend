@@ -362,3 +362,63 @@
             "diagnostic": "string"
         }
         ```
+
+## Pruebas médicas
+### Obtener pruebas
+- **URL:** `/tests/:username`
+- **Método:** `GET`
+- **Descripción:** Obtienes las pruebas médicas de un paciente por su username.
+- **Respuesta exitosa:**
+    - **Código:** `200 OK`
+    - **Cuerpo:**
+        ```json
+        [
+            {
+                "username": "string",
+                "analitic": "string",
+                "gasometry": "string",
+                "ecg": "string",
+                "torax": "string",
+                "curr_date": "date"
+            }
+        ]
+        ```
+
+### Crear pruebas médicas
+- **URL:** `/tests`
+- **Método:** `POST`
+- **Descripción:** Crea las pruebas médicas realizadas a un paciente en cierta fecha.
+- **Cuerpo de la solicitud:**
+    ```json
+    {
+        "username": "string",
+        "analitic": "string",
+        "gasometry": "string",
+        "ecg": "string",
+        "torax": "string",
+        "curr_date": "date"
+    }
+    ```
+- **Respuesta exitosa:**
+    - **Código:** `201 OK`
+    - **Cuerpo:**
+        ```json
+        {
+            "username": "string",
+            "analitic": "string",
+            "gasometry": "string",
+            "ecg": "string",
+            "torax": "string",
+            "curr_date": "date"
+        }
+        ```
+
+### Borrar pruebas médicas
+- **URL:** `/tests/:username/:curr_date`
+- **Método:** `DELETE`
+- **Descripción:** Elimina un conjunto de pruebas médicas de un usuario en cierta fecha.
+- **Parámetros de la URL:**
+    - `username` (string): username del usuario.
+    - `curr_date` (date): fecha de las pruebas.
+- **Respuesta exitosa:**
+    - **Código:** `204 No Content`
