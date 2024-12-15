@@ -65,6 +65,11 @@ app.get('/qresp_api/login', async (req, res) => {
   }
 });
 
+app.post('/qresp_api/logout', (req, res) => {
+  res.clearCookie('username');
+  res.redirect('localhost:3000');
+});
+
 app.get('/qresp_api/qr/:username', async (req, res) => {
   try {
     const db = connectDB();
@@ -234,9 +239,6 @@ app.put('/qresp_api/patient/:username', async (req, res) => {
       case 'Dona':
         req.body.gender = 'F';
         break;
-      case 'Altres':
-        req.body.gender = 'O';
-        break;
       default:
         req.body.gender = 'O';
         break;
@@ -248,7 +250,7 @@ app.put('/qresp_api/patient/:username', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const age = new Date().getFullYear() - new Date(req.body.birth).getFullYear();
-    const [username, dni, name, lastName, birth, tel, gender] = [result.username, result.dni, result.name, result.last_name, result.birth, result.tel, result.gender];
+    const [username, dni, name, lastName, birth, tel, gender] = [req.params.username, req.body.dni, req.body.name, req.body.last_name, req.body.birth, req.body.tel, req.body.gender];
     await updatePatient(username, dni, name, lastName, birth, tel, gender, age);
     res.status(200).json({ username, dni, name, lastName, birth, tel, gender, age });
   } catch (err) {
