@@ -485,7 +485,7 @@
 
 ## Diagnóstico final
 ### Crear decisión final
-- **URL:** `/final_decision`
+- **URL:** `/final_treatment`
 - **Método:** `POST`
 - **Descripción:** Crea el diagnóstico final del paciente.
 - **Cuerpo de la solicitud:**
