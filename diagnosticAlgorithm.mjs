@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import fs from 'fs';
 import connectDB from './dbConnection.mjs';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -7,6 +8,35 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+function fileToGenerativePart (path, mimeType) {
+  return {
+    inlineData: {
+      data: Buffer.from(fs.readFileSync(path)).toString('base64'),
+      mimeType
+    }
+  };
+}
+
+const filePart1 = fileToGenerativePart('data/AGUDITZACIONS.pdf', 'application/pdf');
+const filePart2 = fileToGenerativePart('data/Enfermedades_Intersticiales_pulmonares.pdf', 'application/pdf');
+const filePart3 = fileToGenerativePart('data/Bronquiolitis.html', 'text/html');
+const filePart4 = fileToGenerativePart('data/Fibrosis.html', 'text/html');
+const filePart5 = fileToGenerativePart('data/Neumonia_linfoide.html', 'text/html');
+
+async function run (prompt) {
+  const imageParts = [
+    filePart1,
+    filePart2,
+    filePart3,
+    filePart4,
+    filePart5
+  ];
+
+  const generatedContent = await model.generateContent([prompt, ...imageParts]);
+
+  return generatedContent.response.text();
+}
 
 let prompt, age, gender, mpid, ttmBase, immuno, comorbi, symptomsStr;
 const symList = [];
@@ -78,7 +108,7 @@ async function generateDiagnostic (username) {
   }
   prompt = `Imagina que ets un doctor especialitzat en pneumologia.
     Necessito que no t'esplaixis i em donis una resposta clara i concisa, ja que podria ser que el pacient necessités anar a urgències.
-    Amb una explicació per sobre dels seus síntomes i com això afecta la seva condició hi haurà prou.
+    Amb una explicació per sobre dels seus síntomes i com això afecta la seva condició hi haurà prou. Fes ús dels arxius adjunts per a la teva resposta.
     Ara et proporcionaré dades d'un pacient que pateix d'una mpid i té les següents condicions:
     - Edat: ${age}
     - Gènere: ${gender}
@@ -92,10 +122,12 @@ async function generateDiagnostic (username) {
     Pren la decisió amb criteris clínics rigorosos i amb la informació que t'he proporcionat.
     En cas que hagi d'anar a urgències, la primera frase que diràs serà "AQUEST PACIENT HA D'ANAR A URGÈNCIES",
     en cas contrari, la primera frase serà "AQUEST PACIENT NO HA D'ANAR A URGÈNCIES".
-    Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente.`;
+    Vull la resposta en text sense format i que cada vegada que parli amb tu oblidis el que s'ha parlat anteriorment.
+    Fes ús dels arxius adjunts per a la teva resposta.`;
 
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+  const result = await run(prompt);
+
+  return result;
 }
 
 async function generateDecision (username, valoration) {
@@ -220,7 +252,8 @@ async function generateDecision (username, valoration) {
         hauràs de prescriure Piperacilina/Tazobactam 4g/0,5g /8h e.v. (ó cefalosporina 3ª generació) + Levofloxacino 500mg/24h v.o.
         En cas de sospitar de CMV, hauràs de prescriure Ganciclovir 5mg/Kg pes/12h e.v.
         En cas de sospitar Pn. jiroveci, hauràs de prescriure Sulfametoxazol/trimetoprim 800/160 mg/12h e.v. + Àc. Fòlic.
-        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
+        Vull la resposta en text sense format i que cada vegada que parli amb tu oblidis el que s'ha parlat anteriorment.
+        Fes ús dels arxius adjunts per a la teva resposta.
         `;
       } else {
         prompt = `Imagina que ets un doctor especialitzat en pneumologia.
@@ -248,7 +281,8 @@ async function generateDecision (username, valoration) {
         Com el pacient és immunocompetent, hauràs de prescriure un tractament que inclogui:
         - Oseltamivir 75mg/12h v.o.
         - Cefalosporina 3ªG + Levofloxacino 500 mg/24h v.o.
-        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
+        Vull la resposta en text sense format i que cada vegada que parli amb tu oblidis el que s'ha parlat anteriorment.
+        Fes ús dels arxius adjunts per a la teva resposta.
         `;
       }
       break;
@@ -288,7 +322,8 @@ async function generateDecision (username, valoration) {
         - LOSARTAN 50mg/24h v.o. (antiapoptòtic epitelial). Tan sols si sospita dany epitelial alveolar i no hipoTA).
 
         A més a més, has de proporcionar un tractament específic per al pacient segons les seves condicions.
-        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
+        Vull la resposta en text sense format i que cada vegada que parli amb tu oblidis el que s'ha parlat anteriorment.
+        Fes ús dels arxius adjunts per a la teva resposta.
         `;
       } else {
         prompt = `Imagina que ets un doctor especialitzat en pneumologia.
@@ -319,7 +354,8 @@ async function generateDecision (username, valoration) {
         - LOSARTAN 50mg/24h v.o. (antiapoptòtic epitelial). Tan sols si sospita dany epitelial alveolar i no hipoTA).
 
         A més a més, has de proporcionar un tractament específic per al pacient segons les seves condicions.
-        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
+        Vull la resposta en text sense format i que cada vegada que parli amb tu oblidis el que s'ha parlat anteriorment.
+        Fes ús dels arxius adjunts per a la teva resposta.
         `;
       }
       break;
@@ -355,14 +391,14 @@ async function generateDecision (username, valoration) {
 
         Si no es tractava de TEP, fes-li una valoració parènquima i tracta el seu cas individualment.
         A partir de la informació proporcionada, hauràs de prescriure un tractament específic per al pacient.
-        Quiero la respuesta en texto plano y que cada vez que hable contigo olvides lo hablado anteriormente..
-
+        Vull la resposta en text sense format i que cada vegada que parli amb tu oblidis el que s'ha parlat anteriorment.
+        Fes ús dels arxius adjunts per a la teva resposta.
         `;
       break;
     }
   }
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+  const result = await run(prompt);
+  return result;
 }
 
 export { generateDiagnostic, generateDecision };

@@ -13,20 +13,14 @@ function validateHistory (history) {
 async function createSymptoms (username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise) {
   const db = connect();
   try {
-    db.execute('DELETE FROM symptoms WHERE username = ?', [username]);
-  } catch (error) {
-    console.error('Error deleting data:', error);
-    throw error;
-  }
-  try {
     const [result] = await db.execute(
-      'INSERT INTO symptoms (username, suffocate, cough, mucus, congestion, throat, fever, chest_pain, whistle, malaise) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [username, suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise]
+      'UPDATE symptoms SET suffocate = ?, cough = ?, mucus = ?, congestion = ?, throat = ?, fever = ?, chest_pain = ?, whistle = ?, malaise = ? WHERE username = ?',
+      [suffocate, cough, mucus, congestion, throat, fever, chestPain, whistle, malaise, username]
     );
     db.end();
     return result;
   } catch (error) {
-    console.error('Error inserting data:', error);
+    console.error('Error updating data:', error);
     db.end();
     throw error;
   }

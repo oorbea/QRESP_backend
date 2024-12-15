@@ -34,7 +34,6 @@ async function generateAndSaveQR (username, password) {
     const qrFilePath = path.normalize(path.join(qrDirectory, `${username}.png`));
 
     fs.writeFileSync(qrFilePath, qrBuffer);
-
     return qrFilePath;
   } catch (err) {
     console.error('Error al generar o guardar el QR:', err);
